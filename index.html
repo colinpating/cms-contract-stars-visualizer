@@ -1,0 +1,100 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMS Stars Visualizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./app.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <h1>CMS Stars Visualizer</h1>
+      <p>Contract-level and lives-weighted trends (2017-2026)</p>
+      <div id="meta" class="meta"></div>
+    </header>
+
+    <section class="controls">
+      <div class="tabs" role="tablist" aria-label="View level">
+        <button class="tab active" data-tab="contract">Contract</button>
+        <button class="tab" data-tab="parent">Parent Company</button>
+        <button class="tab" data-tab="all_ma">All MA</button>
+      </div>
+
+      <div class="filters">
+        <label>
+          Measure
+          <select id="measureSelect"></select>
+        </label>
+
+        <label>
+          Metric
+          <select id="metricSelect">
+            <option value="raw_measure_data">Raw Measure Data</option>
+            <option value="measure_stars">Measure Stars</option>
+            <option value="star_weight">Star Weight</option>
+            <option value="calculated_raw_stars_score">Calculated Raw Stars Score</option>
+            <option value="total_raw_stars_score">Total Raw Stars Score</option>
+          </select>
+        </label>
+
+        <button id="exportBtn" class="export-btn">Export CSV</button>
+      </div>
+
+      <div class="compare-builder">
+        <div class="quick-buttons">
+          <button type="button" class="quick-btn" data-quick="humana">Humana</button>
+          <button type="button" class="quick-btn" data-quick="cvs">CVS</button>
+          <button type="button" class="quick-btn" data-quick="unh">UNH</button>
+          <button type="button" class="quick-btn" data-quick="all_ma">All MA</button>
+        </div>
+
+        <div class="builder-row">
+          <label>
+            Compare Scope
+            <select id="scopeSelect">
+              <option value="contract">Contract</option>
+              <option value="parent">Parent Company</option>
+              <option value="all_ma">All MA</option>
+            </select>
+          </label>
+          <label>
+            Find Entity
+            <input id="entitySearch" type="search" placeholder="Search contracts or parent companies..." />
+          </label>
+          <div class="series-note">
+            <div>Selected series: <strong id="seriesCount">0</strong> / 8</div>
+            <div id="seriesMessage" class="series-message" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div id="entityList" class="entity-list" role="listbox" aria-label="Available entities"></div>
+        <div id="selectedChips" class="selected-chips" aria-label="Selected series"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 id="chartTitle">Trend</h2>
+      <div id="chartLegend" class="chart-legend"></div>
+      <svg id="chart" viewBox="0 0 1000 360" preserveAspectRatio="none"></svg>
+      <div id="tooltip" class="tooltip" hidden></div>
+    </section>
+
+    <section class="panel">
+      <h2>Values</h2>
+      <div class="table-wrap">
+        <table id="dataTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="./data/data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
