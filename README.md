@@ -40,6 +40,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\open-app.ps1
 ## Generated Data
 - `data/data.js` is generated and intentionally not committed to git.
 - Build it with the script above before opening `index.html`.
+- GitHub Pages deployment uses `data/years/*.json` shards, which are committed to this repo and loaded by `app.js` at runtime.
 
 ## Notes
 - Current star weight handling uses equal weights (`1.0`) per available measure because CMS measure tables do not publish an explicit star-weight column in the downloaded measure tables.

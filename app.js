@@ -1,10 +1,37 @@
-﻿(function () {
-  const data = window.STARS_DATA;
-  if (!data || !Array.isArray(data.contract_records)) {
-    document.body.innerHTML = '<p style="padding:20px;font-family:sans-serif">Data missing. Run scripts/build-cms-stars-dataset.ps1 first.</p>';
-    return;
+(function () {
+  async function loadData() {
+    if (window.STARS_DATA && Array.isArray(window.STARS_DATA.contract_records)) {
+      return window.STARS_DATA;
+    }
+
+    const combined = {
+      contract_records: [],
+      contract_year_totals: [],
+      parent_aggregates: [],
+      parent_year_totals: [],
+      all_ma_aggregates: [],
+      all_ma_year_totals: []
+    };
+
+    for (let year = 2017; year <= 2026; year += 1) {
+      const res = await fetch(`./data/years/${year}.json`, { cache: 'no-cache' });
+      if (!res.ok) {
+        throw new Error(`Failed to load data shard for ${year} (${res.status})`);
+      }
+      const shard = await res.json();
+      combined.contract_records.push(...(shard.contract_records || []));
+      combined.contract_year_totals.push(...(shard.contract_year_totals || []));
+      combined.parent_aggregates.push(...(shard.parent_aggregates || []));
+      combined.parent_year_totals.push(...(shard.parent_year_totals || []));
+      combined.all_ma_aggregates.push(...(shard.all_ma_aggregates || []));
+      combined.all_ma_year_totals.push(...(shard.all_ma_year_totals || []));
+    }
+
+    return combined;
   }
 
+  (async function init() {
+  const data = await loadData();
   const yearMin = 2017;
   const yearMax = 2026;
   const MAX_SERIES = 8;
@@ -792,5 +819,7 @@
   if (firstContract) addSelection('contract', firstContract);
 
   refreshControls();
-  render();
+  render();  })().catch((err) => {
+    document.body.innerHTML = `<p style="padding:20px;font-family:sans-serif">Data missing or failed to load: ${String(err && err.message ? err.message : err)}</p>`;
+  });
 })();
